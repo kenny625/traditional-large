@@ -33,6 +33,9 @@ $(document).ready(function () {
     var lastFrame = null;
     var lastJ = null;
     var lastZ = null;
+    var storedJ= new Array();
+    var frameIndex = 0;
+    var autoCorrectFramesKeyTap = 20;
     // Setup Leap loop with frame callback function
     var controllerOptions = {
         enableGestures: true
@@ -149,7 +152,11 @@ console.log(keys.eq(j).html());
 
                             case "keyTap":
                               //onKeyTap( gesture );
-                              writeWord();
+                              if(storedJ[(frameIndex+1)%(autoCorrectFramesKeyTap+1)]!=null && storedJ[(frameIndex+1)%(autoCorrectFramesKeyTap+1)] != j){
+									keys.eq(storedJ[(frameIndex+1)%(autoCorrectFramesKeyTap+1)]).mouseenter();
+									console.log('correct');
+								}
+								writeWord();
                               break;
 
                           }
@@ -160,14 +167,20 @@ console.log(keys.eq(j).html());
         	if (lastFrame !== null) {
 /*             console.log(frame.pointables[0].touchDistance); */
             	for (var p = 0; p < frame.pointables.length; p++) {
-                	if (frame.pointables[p].touchDistance <= 0 && lastFrame.pointables[p].touchDistance > 0) {
-                    	writeWord();
+                	if (frame.pointables[p].touchDistance <= 0 && lastFrame.pointables[p].touchDistance > 0 && frame.pointables[p].touchDistance != undefined) {
+/*                     	writeWord(); */
 						}else if(frame.pointables[p].touchDistance > 0){
 							$('#enlargeLetter').css({"color": "blue"});
 						}
 					}
 				}
         lastFrame = frame;
+        storedJ[frameIndex] = lastJ;
+        if(frameIndex == autoCorrectFramesKeyTap){
+	        frameIndex = 0;
+        }else{
+	        frameIndex++;
+        }
             });
 
 			
