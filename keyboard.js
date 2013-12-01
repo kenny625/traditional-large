@@ -37,14 +37,24 @@ $(document).ready(function () {
     var frameIndex = 0;
     var autoCorrectFramesKeyTap = 20;
     // Setup Leap loop with frame callback function
+/*
     var controllerOptions = {
         enableGestures: true
     };
+*/
 
 /* 	printKeyPosition(); */
 		var keys = $('#keyboard li');
-      Leap.loop(controllerOptions, function (frame) {
-        
+		
+		var socket = io.connect('http://140.112.30.32:8001');
+	    /*
+socket.on('toRemote', function (data) {
+		        console.log(data);
+			      });
+*/
+			      
+      socket.on('toRemote', function (data) {
+        var frame = JSON.parse(data);
         if (frame.pointables.length > 0) {
                             for (var i = 0; i < frame.pointables.length; i++) {
                                       var pointable = frame.pointables[i];
@@ -152,11 +162,13 @@ console.log(keys.eq(j).html());
 
                             case "keyTap":
                               //onKeyTap( gesture );
-                              if(storedJ[(frameIndex+1)%(autoCorrectFramesKeyTap+1)]!=null && storedJ[(frameIndex+1)%(autoCorrectFramesKeyTap+1)] != j){
+                              /*
+if(storedJ[(frameIndex+1)%(autoCorrectFramesKeyTap+1)]!=null && storedJ[(frameIndex+1)%(autoCorrectFramesKeyTap+1)] != j){
 									keys.eq(storedJ[(frameIndex+1)%(autoCorrectFramesKeyTap+1)]).mouseenter();
 									console.log('correct');
 								}
 								writeWord();
+*/
                               break;
 
                           }
@@ -168,7 +180,7 @@ console.log(keys.eq(j).html());
 /*             console.log(frame.pointables[0].touchDistance); */
             	for (var p = 0; p < frame.pointables.length; p++) {
                 	if (frame.pointables[p].touchDistance <= 0 && lastFrame.pointables[p].touchDistance > 0 && frame.pointables[p].touchDistance != undefined) {
-/*                     	writeWord(); */
+                    	writeWord();
 						}else if(frame.pointables[p].touchDistance > 0){
 							$('#enlargeLetter').css({"color": "blue"});
 						}
