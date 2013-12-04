@@ -54,6 +54,7 @@ socket.on('toRemote', function (data) {
 */
 			      
       socket.on('toRemote', function (data) {
+      console.log(data);
         var frame = JSON.parse(data);
         if (frame.pointables.length > 0) {
                             for (var i = 0; i < frame.pointables.length; i++) {
