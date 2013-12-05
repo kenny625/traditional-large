@@ -114,18 +114,12 @@ console.log('i '+i);
 		console.log($('#keyboard li').eq(i).html());
 		console.log($('#keyboard li').eq(i).attr('id'));
 */
-/* 		keys[$('#keyboard li').eq(i).attr('id')] = $('#keyboard li').eq(i).position(); */
-var key=$('#keyboard li').eq(i).attr('id'),value=$('#keyboard li').eq(i).position();
 
-var item = {key: value};
-console.log(item);
-		keys.push(item);
+	var item = $('#keyboard li').eq(i).position();
+	item['elementID'] = $('#keyboard li').eq(i).attr('id');
+	keys.push(item);
 	}
-	/*
-JSON.stringify(keys);
-	console.log(keys);
-	var test= {key: "value"};
-*/
-/* 	JSON.stringify(test); */
+
+/* 	console.log(keys); */
 	socket.emit('keyboardElement', keys);
 }
