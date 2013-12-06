@@ -1,6 +1,8 @@
 var socket = io.connect('http://140.112.30.32:8001');
 
 $(document).ready(function () {
+	var keys = $('#keyboard li');
+	
     $('#keyboard li').hover(function () {
         $('#enlargeLetter').remove();
         $class = $(this).attr('class');
@@ -36,13 +38,19 @@ $(document).ready(function () {
 		$('#pos').html('x '+Math.round(data['left'])+' y '+Math.round(data['top']));
 		$('#cursor').css({left:data['left'], top:data['top'], position:'absolute'});
 	});
-   
-
 	
-		var keys = $('#keyboard li');
-		
-
-			
+	socket.on('hoverKey', function (data) {
+		$("#" + data['elementID']).mouseenter();
+	});
+	
+	socket.on('tap', function (data) {
+		writeWord();
+	});
+	
+	socket.on('screenTapOut', function (data){
+		$('#enlargeLetter').css({"color": "blue"});
+	});
+   
 
     $('#q').mouseenter();
 
